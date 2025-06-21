@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gửi Mẹ iu</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-color: black;
+      overflow: hidden;
+      font-family: 'Arial', sans-serif;
+      position: relative;
+    }
+    .star {
+      position: absolute;
+      background-color: white;
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: twinkle 1.5s infinite ease-in-out;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+    }
+    .falling-text {
+      font-size: 30px;
+      font-weight: bold;
+      color: #FF69B4;
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      text-align: center;
+      animation:
+        fall 6s linear forwards,
+        swing 2s ease-in-out infinite;
+      text-shadow: 0 0 10px #FF69B4, 0 0 20px #FF69B4, 0 0 30px #FF1493;
+      z-index: 10;
+    }
+    @keyframes fall {
+      0% { top: -50px; opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { top: 100vh; opacity: 0; }
+    }
+    @keyframes swing {
+      0%, 100% { transform: translateX(-50%) rotate(0deg); }
+      25% { transform: translateX(-50%) rotate(3deg); }
+      75% { transform: translateX(-50%) rotate(-3deg); }
+    }
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 15px 30px;
+      background-color: #FF69B4;
+      color: white;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: 10px;
+      z-index: 20;
+    }
+    .play-button:hover {
+      background-color: #FF1493;
+    }
+    .status-bar {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      color: white;
+      z-index: 10;
+    }
+    .status-bar .icon {
+      margin-right: 10px;
+    }
+    .time {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .date {
+      font-size: 14px;
+      margin-left: 5px;
+    }
+    .author-info, .song-info {
+      position: absolute;
+      bottom: 10px;
+      font-size: 16px;
+      color: #FF69B4;
+      font-weight: bold;
+      text-shadow: 0 0 10px #FF69B4, 0 0 20px #FF69B4;
+      z-index: 10;
+    }
+    .author-info {
+      left: 20px;
+    }
+    .song-info {
+      right: 20px;
+    }
+    @media (max-width: 767px) {
+      .falling-text { font-size: 25px; }
+      .play-button { font-size: 18px; padding: 12px 20px; }
+      .status-bar, .author-info, .song-info { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <audio
+    id="song"
+    src="Đường%20Tôi%20Chở%20Em%20Về%20-%20buitruonglinh%20-%20Lyrics%20Video%20-.mp3"
+    loop
+  ></audio>
+
+  <button class="play-button" onclick="document.getElementById('song').play(); this.style.display='none'">
+    Nhấn để nghe nhạc
+  </button>
+
+  <div class="status-bar">
+    <div class="icon">📶</div>
+    <div class="icon">🔋 85%</div>
+    <div class="time" id="current-time">00:00</div>
+    <div class="date" id="current-date">Thứ 2, 01/01/2025</div>
+  </div>
+
+  <div class="star-field"></div>
+
+  <div class="author-info">🌐 Trang web bởi Phạm Hoàng Long</div>
+  <div class="song-info">🎵 Đường Tôi Chở Em Về - Buitruonglinh</div>
+
+  <script>
+    function createStars() {
+      const field = document.querySelector(".star-field");
+      for (let i = 0; i < 200; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        const size = Math.random() * 3 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.top = `${Math.random() * 100}vh`;
+        star.style.left = `${Math.random() * 100}vw`;
+        star.style.animationDuration = `${Math.random() + 1}s`;
+        field.appendChild(star);
+      }
+    }
+
+    function createFallingText() {
+      const texts = [
+        "Ở bên đấy mẹ nhớ ăn uống đầy đủ nhé",
+        "Mẹ đi làm nhớ giữ gìn sức khỏe không ốm đấy",
+        "Khi nào mẹ về mẹ nhớ mua cho con thật nhiều ngô nhé",
+        "Con yêu mẹ rất nhiều!"
+      ];
+
+      let index = 0;
+
+      setInterval(() => {
+        const text = document.createElement("div");
+        text.className = "falling-text";
+        text.textContent = texts[index];
+        document.body.appendChild(text);
+        setTimeout(() => text.remove(), 6000);
+        index = (index + 1) % texts.length;
+      }, 3000);
+    }
+
+    function updateTime() {
+      const timeEl = document.getElementById("current-time");
+      const dateEl = document.getElementById("current-date");
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      const dayNames = ["Chủ Nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+      const day = dayNames[now.getDay()];
+      const d = now.getDate();
+      const mo = now.getMonth() + 1;
+      const y = now.getFullYear();
+      timeEl.textContent = `${h}:${m}`;
+      dateEl.textContent = `${day}, ${d}/${mo}/${y}`;
+    }
+
+    setInterval(updateTime, 1000);
+    createStars();
+    createFallingText();
+  </script>
+</body>
+</html>
